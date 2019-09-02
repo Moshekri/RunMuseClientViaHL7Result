@@ -77,8 +77,8 @@ namespace App_run_Window
             startInfo.FileName = Path.Combine(startInfo.WorkingDirectory, "museeditor.exe");
 
             startInfo.Arguments += $"/PID:{data.PID}";
-            startInfo.Arguments += $" /TestType:{(int)Enum.Parse(typeof(TestTypes), data.TestType, true)}";
             startInfo.Arguments += $" /Site:{data.Site}";
+            startInfo.Arguments += $" /TestType:{(int)Enum.Parse(typeof(TestTypes), data.TestType, true)}";
             startInfo.Arguments += $" /TestDateTime:{data.TestDateTime}";
             startInfo.UseShellExecute = true;
            
@@ -86,12 +86,27 @@ namespace App_run_Window
 
             using (Process proc = new Process())
             {
+               
                 proc.StartInfo = startInfo;
                 proc.Start();
             }
 
         }
 
-       
+        private void TxtSource_DragDrop(object sender, DragEventArgs e)
+        {
+            var s = "s";
+            var data = e.Data.GetFormats(true);
+            var n = e.Data.GetData("FileName",true) as string[];
+           
+            var text = File.ReadAllText(n[0]);
+            txtSource.Text = text;
+
+        }
+
+        private void TxtSource_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
+        }
     }
 }
